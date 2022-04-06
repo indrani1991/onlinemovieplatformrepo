@@ -28,16 +28,16 @@ public class OnlineMovieTicketController {
    private OnlineMovieTicketService movieTicketService;
 
     @PostMapping("/save/movie")
-    private String addMovie(@Valid @RequestBody List<MovieVO> movieDetails)
+    private String addMovie(@RequestBody List<MovieVO> movieList)
     {
-        List<MovieDetails> dedupMovies=movieTicketService.saveMovie(movieDetails);
-        if(dedupMovies.size()>0)
-        {
-            List<String> dedupMovieName=dedupMovies.stream().map(MovieDetails::getMovieName).collect(Collectors.toList());
-            String mo = String.join(", ", dedupMovieName);
-            return mo+" movies already exists";
-        }
-        return "Movies added successfully";
+      List<MovieDetails> dedupMovies = movieTicketService.saveMovie(movieList);
+            if (dedupMovies.size() > 0) {
+                List<String> dedupMovieName = dedupMovies.stream().map(MovieDetails::getMovieName).collect(Collectors.toList());
+                String mo = String.join(", ", dedupMovieName);
+                return mo + " movies already exists";
+            }
+            return "Movies added successfully";
+
     }
 
     @PostMapping("/save/theater")
@@ -60,14 +60,14 @@ public class OnlineMovieTicketController {
         return "Added successfully";
     }
 
-    @PostMapping("/update/shows")
+    @PutMapping("/update/shows")
     private String updateShows(@RequestBody List<OnlineMoviePlatformVO> showDetails)
     {
         movieTicketService.updateShowDetails(showDetails);
         return "Updated successfully";
     }
 
-    @PostMapping("/delete/shows")
+    @DeleteMapping("/delete/shows")
     private String deleteShows(@RequestBody List<OnlineMoviePlatformVO> showDetails)
     {
         movieTicketService.deleteShowDetails(showDetails);
